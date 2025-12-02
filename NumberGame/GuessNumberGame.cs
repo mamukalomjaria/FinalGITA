@@ -71,7 +71,7 @@ namespace NumberGame
             int score = 11 - attemptsUsed;
 
             UpdateScores(name, score);
-
+            ShowTop10();
         }
 
         private static int AskDifficulty()
@@ -136,6 +136,28 @@ namespace NumberGame
             File.WriteAllLines(ScoresFile, lines);
         }
 
+        private static void ShowTop10()
+        {
+            var scores = LoadScores()
+                .OrderByDescending(s => s.BestScore)
+                .Take(10)
+                .ToList();
+
+            Console.WriteLine("\n=== TOP 10 PLAYERS ===");
+            if (scores.Count == 0)
+            {
+                Console.WriteLine("No scores yet.");
+                return;
+            }
+
+            int rank = 1;
+            foreach (var s in scores)
+            {
+                Console.WriteLine($"{rank}. {s.Name} - {s.BestScore}");
+                rank++;
+            }
+            Console.WriteLine("======================\n");
+        }
 
     }
 }

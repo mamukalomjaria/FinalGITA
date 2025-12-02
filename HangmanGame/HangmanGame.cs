@@ -110,6 +110,7 @@ namespace StrangleGame
                 int score = maxWrong - wrong;
                 Console.WriteLine($"You won! The word was '{secret}'. Score: {score}");
                 UpdateScores(name!, score);
+                ShowTop10();
             }
             else
             {
@@ -154,6 +155,29 @@ namespace StrangleGame
                 existing.BestScore = newScore;
             }
             SaveScores(scores);
+        }
+
+        private static void ShowTop10()
+        {
+            var scores = LoadScores()
+                .OrderByDescending(s => s.BestScore)
+                .Take(10)
+                .ToList();
+
+            Console.WriteLine("\n=== HANGMAN TOP 10 ===");
+            if (scores.Count == 0)
+            {
+                Console.WriteLine("No scores yet.");
+                return;
+            }
+
+            int rank = 1;
+            foreach (var s in scores)
+            {
+                Console.WriteLine($"{rank}. {s.Name} - {s.BestScore}");
+                rank++;
+            }
+            Console.WriteLine("======================\n");
         }
 
     }
